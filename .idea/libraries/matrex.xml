@@ -2,6 +2,7 @@
   <library name="matrex" type="mix">
     <CLASSES>
       <root url="file://$PROJECT_DIR$/_build/dev/lib/matrex/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/test/lib/matrex/ebin" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

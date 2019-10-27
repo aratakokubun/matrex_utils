@@ -1,13 +1,13 @@
 defmodule MatrexUtils do
   @moduledoc """
-    Utility functions to supplement Matrex.
+  Utility functions to supplement Matrex.
   """
 
   require Matrex
   @binary_per_data 4
 
   @doc """
-    Adds two matrices which have either matched rows or columns
+  Adds two matrices which have either matched rows or columns
   """
   def add(%Matrex{} = first, %Matrex{} = second, alpha \\ 1.0, beta \\ 1.0), do: _add(first, second, alpha, beta)
 
@@ -89,8 +89,8 @@ defmodule MatrexUtils do
   end
 
   @doc """
-    Broadcast matrix rows or columns to align to target shape.
-    Only accepts broadcasting rows or columns at one time.
+  Broadcast matrix rows or columns to align to target shape.
+  Only accepts broadcasting rows or columns at one time.
   """
   def broad_cast(
         %Matrex{
@@ -126,7 +126,7 @@ defmodule MatrexUtils do
   end
 
   @doc """
-    Get sum of rows or cols and compose them to Matrex.
+  Get sum of rows or cols and compose them to Matrex.
   """
   def sum(%Matrex{} = x, :rows) do
     <<rows::unsigned-integer-little-32,
@@ -145,7 +145,6 @@ defmodule MatrexUtils do
               columns::unsigned-integer-little-32,
               new_body::binary>>}
   end
-
   def sum(%Matrex{} = x, :columns) do
     <<rows::unsigned-integer-little-32,
       columns::unsigned-integer-little-32,
@@ -165,7 +164,7 @@ defmodule MatrexUtils do
   end
 
   @doc """
-    Fetch data of specified list of rows and compose them to Matrex.
+  Fetch data of specified list of rows and compose them to Matrex.
   """
   def fetch(%Matrex{} = x, [_| _] = row_indices) do
     <<_::unsigned-integer-little-32,
@@ -187,7 +186,7 @@ defmodule MatrexUtils do
   end
 
   @doc """
-    Create a mesh grid 2d array in the rectangle.
+  Create a mesh grid 2d array in the rectangle.
   """
   def meshgrid([_| _] = x_range, [_| _] = y_range) do
     {
@@ -197,7 +196,7 @@ defmodule MatrexUtils do
   end
 
   @doc """
-    Create a list in the range with the step.
+  Create a list in the range with the step.
   """
   def arrange(s, e, step) when s < e do
     Stream.iterate(s, &(&1 + step))
@@ -205,7 +204,7 @@ defmodule MatrexUtils do
   end
 
   @doc """
-    Return argmax for row/column indices.
+  Return argmax for row/column indices.
   """
   def argmax(%Matrex{} = x, :rows) do
     1..x[:columns]
@@ -217,7 +216,7 @@ defmodule MatrexUtils do
   end
 
   @doc """
-    Create a matrex of flattened list.
+  Create a matrex of flattened list.
   """
   def flattened([_ | _] = list) do
     list
@@ -227,14 +226,14 @@ defmodule MatrexUtils do
   end
 
   @doc """
-    Create a matrex braced with []
+  Create a matrex braced with []
   """
   def new([head | _] = list) when is_number(head) do
     Matrex.new([list])
   end
 
   @doc """
-    Normalize matrex with L2 norm, that is sqrt sum of squared all elements.
+  Normalize matrex with L2 norm, that is sqrt sum of squared all elements.
   """
   def l2_normalize(%Matrex{} = x, eps \\ 1.0e-8) do
     Matrex.divide(x, _l2norm(x) + eps)
@@ -248,10 +247,24 @@ defmodule MatrexUtils do
   end
 
   @doc """
-    Create a matrex that has a same shape of given matrex.
+  Create a matrex that has a same shape of given matrex.
   """
   def zeros_like(
         %Matrex{data: <<rows::unsigned-integer-little-32, columns::unsigned-integer-little-32, _::binary>>}) do
     Matrex.zeros(rows, columns)
+  end
+
+  @doc """
+  Calculate squared norm of specified vector, which must be 1 row of Matrex.
+
+  iex(1)> Matrex.sq_norm(Matrex.new([0, 0, 0]))
+  0
+  iex(2)> Matrex.sq_norm(Matrex.new([1, 2, 3]))
+  14
+  iex(3)> Matrex.sq_norm(Matrex.new([-1, -2, -3]))
+  14
+  """
+  def sq_norm(%Matrex{data: <<1::unsigned-integer-little-32, _::unsigned-integer-little-32, _::binary>>} = v) do
+    Matrex.dot_nt(v, v) |> Matrex.scalar()
   end
 end

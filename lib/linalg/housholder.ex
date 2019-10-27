@@ -1,4 +1,4 @@
-defmodule HouseHolder do
+defmodule MatrexUtils.HouseHolder do
   require Matrex
   require MatrexUtils
 
@@ -7,11 +7,12 @@ defmodule HouseHolder do
   Note that this function must select the non-zero vector.
   @param v: Target vector, must be Matrex of 1 row.
 
-  iex(1)> HouseHolder.convert2householder_vec(Matrex.new([[1, 0, 0]]))
+  iex(1)> import MatrexUtils.HouseHolder
+  iex(2)> convert2householder_vec(Matrex.new([[1, 0, 0]]))
   {Matrex.new([[2, 0, 0]]), 4.0}
-  iex(2)> HouseHolder.convert2householder_vec(Matrex.new([[1, 2, 3]]))
+  iex(3)> convert2householder_vec(Matrex.new([[1, 2, 3]]))
   {Matrex.new([[15, 2, 3]]), 238.0}
-  iex(3)> HouseHolder.convert2householder_vec(Matrex.new([[-1, -2, -3]]))
+  iex(4)> convert2householder_vec(Matrex.new([[-1, -2, -3]]))
   {Matrex.new([[-15, -2, -3]]), 238.0}
   """
   def convert2householder_vec(
@@ -53,11 +54,12 @@ defmodule HouseHolder do
   Calculate eigen values of 2x2 matrix for householder method.
   This calculation done by quadratic formula.
 
-  iex(1)> HouseHolder.ev22(0, 0, 0, 0)
+  iex(1)> import MatrexUtils.HouseHolder
+  iex(2)> ev22(0, 0, 0, 0)
   0.0
-  iex(2)> HouseHolder.ev22(2, 1, 1, 2)
+  iex(3)> ev22(2, 1, 1, 2)
   1.0
-  iex(3)> HouseHolder.ev22(2, 2, 2, 4)
+  iex(4)> ev22(2, 2, 2, 4)
   5.23606797749979
   """
   def ev22(x11, x12, x21, x22) do

@@ -22,3 +22,5 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 matrex_utils-*.tar
 
+# Ignore idea setting files
+/.idea

@@ -248,6 +248,12 @@ defmodule MatrexUtils do
 
   @doc """
   Create a matrex that has a same shape of given matrex.
+
+  iex(1)> import MatrexUtils
+  iex(2)> zeros_like(Matrex.random(10, 5))
+  Matrex.zeros(10, 5)
+  iex(3)> zeros_like(Matrex.random(1, 7))
+  Matrex.zeros(1, 7)
   """
   def zeros_like(
         %Matrex{data: <<rows::unsigned-integer-little-32, columns::unsigned-integer-little-32, _::binary>>}) do
@@ -257,12 +263,13 @@ defmodule MatrexUtils do
   @doc """
   Calculate squared norm of specified vector, which must be 1 row of Matrex.
 
-  iex(1)> Matrex.sq_norm(Matrex.new([0, 0, 0]))
-  0
-  iex(2)> Matrex.sq_norm(Matrex.new([1, 2, 3]))
-  14
-  iex(3)> Matrex.sq_norm(Matrex.new([-1, -2, -3]))
-  14
+  iex(1)> import MatrexUtils
+  iex(2)> sq_norm(Matrex.new([[0, 0, 0]]))
+  0.0
+  iex(3)> sq_norm(Matrex.new([[1, 2, 3]]))
+  14.0
+  iex(4)> sq_norm(Matrex.new([[-1, -2, -3]]))
+  14.0
   """
   def sq_norm(%Matrex{data: <<1::unsigned-integer-little-32, _::unsigned-integer-little-32, _::binary>>} = v) do
     Matrex.dot_nt(v, v) |> Matrex.scalar()

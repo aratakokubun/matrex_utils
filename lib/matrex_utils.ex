@@ -205,6 +205,12 @@ defmodule MatrexUtils do
 
   @doc """
   Return argmax for row/column indices.
+
+  iex(1)> import MatrexUtils
+  iex(2)> [[1, -1, 5], [2, 5, 3], [0, 10, 5]] |> Matrex.new() |> argmax(:rows)
+  [2, 3, 1]
+  iex(3)> [[1, -1, 5], [2, 5, 3], [0, 10, 5]] |> Matrex.new() |> argmax(:columns)
+  [3, 2, 2]
   """
   def argmax(%Matrex{} = x, :rows) do
     1..x[:columns]
@@ -217,6 +223,10 @@ defmodule MatrexUtils do
 
   @doc """
   Create a matrex of flattened list.
+
+  iex(1)> import MatrexUtils
+  iex(2)> flattened([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+  Matrex.new([[1], [2], [3], [4], [5], [6], [7], [8], [9]])
   """
   def flattened([_ | _] = list) do
     list
@@ -226,19 +236,33 @@ defmodule MatrexUtils do
   end
 
   @doc """
-  Create a matrex braced with []
+  Create a matrex braced with [] if a not nested list.
+
+  iex(1)> import MatrexUtils
+  iex(2)> new([1, 2, 3, 4])
+  Matrex.new([[1, 2, 3, 4]])
+  iex(3)> new([[1, 2, 3, 4]])
+  Matrex.new([[1, 2, 3, 4]])
   """
   def new([head | _] = list) when is_number(head) do
     Matrex.new([list])
   end
+  def new(list) do
+    Matrex.new(list)
+  end
 
   @doc """
   Normalize matrex with L2 norm, that is sqrt sum of squared all elements.
+
+  iex(1)> import MatrexUtils
+  iex(2)> [[1, 2, 3], [4, 5, 6]] |> Matrex.new() |> l2_normalize()
+  %Matrex{data: <<2, 0, 0, 0, 3, 0, 0, 0, 80, 176, 214, 61, 80, 176, 86, 62, 60, 4, 161, 62, 80, 176, 214, 62, 50, 46, 6, 63, 60, 4, 33, 63>>}
+  iex(3)> [[1, 2, 3], [5, 5, 6]] |> Matrex.new() |> l2_normalize(0.0)
+  Matrex.new([[0.1, 0.2, 0.3], [0.5, 0.5, 0.6]])
   """
   def l2_normalize(%Matrex{} = x, eps \\ 1.0e-8) do
     Matrex.divide(x, _l2norm(x) + eps)
   end
-
   def _l2norm(%Matrex{} = x) do
     x
     |> Matrex.square()
@@ -250,9 +274,9 @@ defmodule MatrexUtils do
   Create a matrex that has a same shape of given matrex.
 
   iex(1)> import MatrexUtils
-  iex(2)> zeros_like(Matrex.random(10, 5))
+  iex(2)> Matrex.random(10, 5) |> zeros_like()
   Matrex.zeros(10, 5)
-  iex(3)> zeros_like(Matrex.random(1, 7))
+  iex(3)> Matrex.random(1, 7) |> zeros_like()
   Matrex.zeros(1, 7)
   """
   def zeros_like(
@@ -264,11 +288,11 @@ defmodule MatrexUtils do
   Calculate squared norm of specified vector, which must be 1 row of Matrex.
 
   iex(1)> import MatrexUtils
-  iex(2)> sq_norm(Matrex.new([[0, 0, 0]]))
+  iex(2)> [[0, 0, 0]] |> Matrex.new() |> sq_norm()
   0.0
-  iex(3)> sq_norm(Matrex.new([[1, 2, 3]]))
+  iex(3)> [[1, 2, 3]] |> Matrex.new() |> sq_norm()
   14.0
-  iex(4)> sq_norm(Matrex.new([[-1, -2, -3]]))
+  iex(4)> [[-1, -2, -3]] |> Matrex.new() |> sq_norm()
   14.0
   """
   def sq_norm(%Matrex{data: <<1::unsigned-integer-little-32, _::unsigned-integer-little-32, _::binary>>} = v) do

@@ -8,11 +8,11 @@ defmodule MatrexUtils.HouseHolder do
   @param v: Target vector, must be Matrex of 1 row.
 
   iex(1)> import MatrexUtils.HouseHolder
-  iex(2)> convert2householder_vec(Matrex.new([[1, 0, 0]]))
+  iex(2)> [[1, 0, 0]] |> Matrex.new() |> convert2householder_vec()
   {Matrex.new([[2, 0, 0]]), 4.0}
-  iex(3)> convert2householder_vec(Matrex.new([[1, 2, 3]]))
+  iex(3)> [[1, 2, 3]] |> Matrex.new() |> convert2householder_vec()
   {Matrex.new([[15, 2, 3]]), 238.0}
-  iex(4)> convert2householder_vec(Matrex.new([[-1, -2, -3]]))
+  iex(4)> [[-1, -2, -3]] |> Matrex.new() |> convert2householder_vec()
   {Matrex.new([[-15, -2, -3]]), 238.0}
   """
   def convert2householder_vec(
